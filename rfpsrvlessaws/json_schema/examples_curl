@@ -1,0 +1,10 @@
+https://referapoint-dev.com/dev/user/
+
+curl -XPOST -H "Content-type: application/json" -d '{
+   "name" : "Yogi",
+   "firstname" : "ugandhar",
+   "lastname"  : "porla",
+   "email"  : "yogi@yogi4.com",
+   "city" : "Toronto",
+   "birth" : "01/01/1990"
+}' 'https://referapoint-dev.com/dev/user/'

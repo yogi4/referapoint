@@ -1,0 +1,10 @@
+{
+  "name": "rfpdynamichtml",
+  "version": "1.0.0",
+  "description": "Serverless REST API with MongoDB using Mongoose and Bluebird",
+  "main": "handler.js",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-domain-manager": "^2.0.0"
+  }
+}
