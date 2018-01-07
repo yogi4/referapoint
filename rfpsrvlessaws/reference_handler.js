@@ -39,6 +39,23 @@ module.exports.reference = (event, context, callback) => {
   });
 };
 
+module.exports.getAllReferences = (event, context, callback) => {
+  const db = mongoose.connect(mongoString).connection;
+  db.once('open', () => {
+    ReferenceModel
+      .find()
+      .then((reference) => {
+        callback(null, { statusCode: 200, body: JSON.stringify(reference) });
+      })
+      .catch((err) => {
+        callback(null, createErrorResponse(err.statusCode, err.message));
+      })
+      .finally(() => {
+        // Close db connection or node event loop won't exit , and lambda will timeout
+        db.close();
+      });
+  });
+};
 module.exports.createReference = (event, context, callback) => {
   let db = {};
   let data = {};
@@ -113,6 +130,7 @@ module.exports.deleteReference = (event, context, callback) => {
   });
 };
 
+
 module.exports.updateReference = (event, context, callback) => {
   const db = mongoose.connect(mongoString).connection;
   const data = JSON.parse(event.body);
@@ -126,11 +144,16 @@ module.exports.updateReference = (event, context, callback) => {
     return;
   }
 
+
   reference = new referenceModel({ _id: id,
     name: data.name,
-    firstname: data.firstname,
-    birth: data.birth,
-    city: data.city,
+    lastupdated_date: Date.now(),
+    reference_seeker: data.reference_seeker,
+    reference_receiver: data.reference_receiver,
+    reference_provider: data.reference_provider,
+    status: data.status,
+    reference_notes: data.reference_notes,
+    reference_text: data.reference_text,
     ip: event.requestContext.identity.sourceIp });
 
   errs = reference.validateSync();

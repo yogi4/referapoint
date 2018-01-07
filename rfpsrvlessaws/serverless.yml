@@ -71,7 +71,7 @@ functions:
     handler: handler.createUser
     events:
       - http:
-          path: user
+          path: users
           method: post
           cors: true
 
@@ -79,7 +79,7 @@ functions:
     handler: handler.updateUser
     events:
       - http:
-          path: user/{id}
+          path: users/{id}
           method: put
           cors: true
 
@@ -87,7 +87,7 @@ functions:
     handler: handler.deleteUser
     events:
       - http:
-          path: user/{id}
+          path: users/{id}
           method: delete
           cors: true
 
@@ -95,7 +95,7 @@ functions:
     handler: handler.user
     events:
       - http:
-          path: user/{id}
+          path: users/{id}
           method: get
           cors: true
 
@@ -103,15 +103,23 @@ functions:
     handler: reference_handler.reference
     events:
       - http:
-          path: reference/{id}
+          path: references/{id}
           method: get
           cors: true
 
+  getAllReferences:
+    handler: reference_handler.getAllReferences
+    events:
+      - http:
+          path: references
+          method: get
+          cors: true
+          
   createReference:
     handler: reference_handler.createReference
     events:
       - http:
-          path: reference
+          path: references
           method: post
           cors: true             
   
@@ -119,7 +127,7 @@ functions:
     handler: reference_handler.deleteReference
     events:
       - http:
-          path: reference/{id}
+          path: references/{id}
           method: delete
           cors: true
 
@@ -127,7 +135,7 @@ functions:
     handler: reference_handler.updateReference
     events:
       - http:
-          path: reference/{id}
+          path: references/{id}
           method: put
           cors: true        
 #yogi code ends 

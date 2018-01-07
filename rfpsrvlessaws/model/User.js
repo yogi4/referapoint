@@ -57,10 +57,25 @@ const model = mongoose.model('User', {
       },
     },
   },
+  usertype: {
+    type: String,
+    enum: ['person','software','solopreneur','organization']
+
+  }
   roles: {
     type: Array,
     required: false,
 
+  },
+  created_date: {
+    type: Date,
+    required: false,
+    default: Date.now,
+  },
+  lastupdated_date: {
+    type: Date,
+    required: false,
+    default: Date.now,
   },
   ip: {
     type: String,

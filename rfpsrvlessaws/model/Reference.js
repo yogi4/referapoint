@@ -50,7 +50,6 @@ const model = mongoose.model('Reference', {
   },
   reference_notes: {
     type: Object,
-    required: false
 
   },
 

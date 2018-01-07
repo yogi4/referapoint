@@ -1,0 +1,717 @@
+---
+swagger: "2.0"
+info:
+  description: "Api for ReferaPoint"
+  version: "0.1.0"
+  title: "ReferaPoint"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "ReferaPoint Team"
+    url: "http://api.referapoint.com"
+    email: "yogi@yogi4.com"
+  license:
+    name: "MIT"
+    url: "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+host: "referapoint.com"
+basePath: "/beta0.1"
+schemes:
+- "http"
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /users:
+    get:
+      summary: "lists users"
+      description: "This is an Admin capability\nRetrieve list of all users , User\
+        \ could be a ReferenceSeeker or Reference Provider admin role or any other\
+        \ user that's part of Referapoint \n"
+      operationId: "findAllUsers"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter results by ; query parameters"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of results to return"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "List of users response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Users"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "Default"
+    post:
+      description: "create a new user. This user could be a ReferenceSeeker, ReferenceProvider,\
+        \ ReferenceGiver or simply a user who signs up to Referepoint without any\
+        \ preset role\n"
+      operationId: "addUser"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "user to be created"
+        required: true
+        schema:
+          $ref: "#/definitions/NewUser"
+      responses:
+        200:
+          description: "reference seeker response"
+          schema:
+            $ref: "#/definitions/Users"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /users/{id}:
+    get:
+      description: "Returns a user based on a single ID, if the user does not have\
+        \ access to the referenceseeker"
+      operationId: "findbyuserid"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "user response"
+          schema:
+            $ref: "#/definitions/Users"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "deletes a single User based on the ID supplied"
+      operationId: "deleteUser"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to delete"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        204:
+          description: "user purged"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /login:
+    post:
+      tags:
+      - "auth"
+      description: "Allow users to log in, and to receive a Token"
+      operationId: "loginPOST"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The email/password"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: "Login Success"
+          schema:
+            $ref: "#/definitions/Token"
+        400:
+          description: "Whether the user is not found or error while login"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Auth"
+  /referenceseekers:
+    get:
+      description: "gets all the reference seekers \n"
+      operationId: "findReferenceSeekers"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "tags to filter by"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of results to return"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Reference Seekers response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/RefSeeker"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a new Reference Seeker.  Duplicates are allowed"
+      operationId: "addRefSeeker"
+      parameters:
+      - in: "body"
+        name: "referenceseeker"
+        description: "reference seeker to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/NewRefSeeker"
+      responses:
+        200:
+          description: "reference seeker response"
+          schema:
+            $ref: "#/definitions/RefSeeker"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceseekers/{id}:
+    get:
+      description: "Returns a user based on a single ID, if the user does not have\
+        \ access to the referenceseeker"
+      operationId: "findbyreferenceseeker"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "referenceseeker response"
+          schema:
+            $ref: "#/definitions/RefSeeker"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "deletes a single referenceseeker based on the ID supplied"
+      operationId: "deleteReferenceSeeker"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to delete"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        204:
+          description: "referenceseeker purged"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceseekers/{id}/referenceproviders:
+    get:
+      description: "Returns reference providers for the reference seeker  if the user\
+        \ does not have access to the referenceseeker"
+      operationId: "findprovidersforID"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "referenceproviders response"
+          schema:
+            $ref: "#/definitions/RefProvider"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Adds a reference provider to referenceseeker."
+      operationId: "addrefprovider"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "refprovider"
+        description: "reference provider to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/NewRefProvider"
+      responses:
+        200:
+          description: "reference provider response"
+          schema:
+            $ref: "#/definitions/RefProvider"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceseekers/{id}/referenceproviders/{pid}:
+    get:
+      description: "Returns reference provider with PID for the reference seeker"
+      operationId: "findproviderbyID"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "pid"
+        in: "path"
+        description: "ID of reference provider to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "reference provider response"
+          schema:
+            $ref: "#/definitions/RefProvider"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "deletes a single referenceprovider based on the ID supplied"
+      operationId: "deleteReferenceProvider"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseekers provider to delete"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "pid"
+        in: "path"
+        description: "ID of reference provider to delete"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        204:
+          description: "referenceprovider purged"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceseekers/{id}/referencereceivers:
+    get:
+      description: "Returns reference receivers for the reference seeker"
+      operationId: "findreceiversforID"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Reference Receivers  response"
+          schema:
+            $ref: "#/definitions/RefReceiver"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceseekers/{id}/referencereceivers/{pid}:
+    get:
+      description: "Returns reference provider with PID for the reference seeker"
+      operationId: "findreceiversbyID"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceseeker to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: "pid"
+        in: "path"
+        description: "ID of reference provider to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "reference provider response"
+          schema:
+            $ref: "#/definitions/RefReceiver"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceproviders:
+    get:
+      description: "gets all the reference providers \n"
+      operationId: "findReferenceProviders"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "tags to filter by"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of results to return"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Reference Providers response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/RefProvider"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a new Reference Provider.  Duplicates are allowed"
+      operationId: "addRefProvider"
+      parameters:
+      - in: "body"
+        name: "referenceprovider"
+        description: "reference provider to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/NewRefProvider"
+      responses:
+        200:
+          description: "reference provider response"
+          schema:
+            $ref: "#/definitions/RefProvider"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referenceproviders/{id}:
+    get:
+      description: "Returns a user based on a single ID, if the user does not have\
+        \ access to the referenceprovider"
+      operationId: "findbyreferenceprovider"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceprovider to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "referenceprovider response"
+          schema:
+            $ref: "#/definitions/RefProvider"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "deletes a single referenceprovider based on the ID supplied"
+      operationId: "deleteRefProvider"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referenceprovider to delete"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        204:
+          description: "referenceprovider purged"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referencereceivers:
+    get:
+      description: "Lists all the reference receivers associated with referenceseeker\
+        \ |\nAdmin will get all Reference Receivers \n"
+      operationId: "findReferenceReceivers"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "tags to filter by"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of results to return"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Reference Receiver response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/RefReceiver"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Creates a new Reference Receiver.  Duplicates are allowed"
+      operationId: "addRefReceiver"
+      parameters:
+      - in: "body"
+        name: "referencereceiver"
+        description: "reference receiver to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/NewRefReceiver"
+      responses:
+        200:
+          description: "reference receiver response"
+          schema:
+            $ref: "#/definitions/RefReceiver"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+  /referencereceivers/{id}:
+    get:
+      description: "Returns a user based on a single ID, if the user does not have\
+        \ access to the referencereceiver"
+      operationId: "findbyreferencereceiver"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referencereceiver to fetch"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "referencereceiver response"
+          schema:
+            $ref: "#/definitions/RefReceiver"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "deletes a single referencereceiver based on the ID supplied"
+      operationId: "deleteRefReceiver"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of referencereceiver to delete"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        204:
+          description: "referencereceiver purged"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Default"
+securityDefinitions:
+  Bearer:
+    description: "For accessing the API a valid JWT token must be passed in all the\
+      \ queries in\nthe 'Authorization' header.\n"
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Users:
+    allOf:
+    - $ref: "#/definitions/NewUser"
+    - required:
+      - "id"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+  NewUser:
+    required:
+    - "email"
+    - "firstname"
+    - "lastname"
+    - "password"
+    - "username"
+    properties:
+      username:
+        type: "string"
+        description: "username must be unique"
+        minLength: 4
+        maxLength: 20
+        pattern: "^\\w+$"
+      password:
+        type: "string"
+        description: "secure password"
+        minLength: 8
+      firstname:
+        type: "string"
+      lastname:
+        type: "string"
+      email:
+        type: "string"
+      phone:
+        type: "string"
+      tag:
+        type: "string"
+      usertype:
+        type: "array"
+        items:
+          type: "string"
+  RefSeeker:
+    allOf:
+    - $ref: "#/definitions/NewRefSeeker"
+    - required:
+      - "id"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+  NewRefSeeker:
+    required:
+    - "name"
+    - "seekertype"
+    properties:
+      name:
+        type: "string"
+      tag:
+        type: "string"
+      seekertype:
+        type: "string"
+  RefProvider:
+    allOf:
+    - $ref: "#/definitions/NewRefProvider"
+    - required:
+      - "id"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+  NewRefProvider:
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+      tag:
+        type: "string"
+  RefReceiver:
+    allOf:
+    - $ref: "#/definitions/NewRefReceiver"
+    - required:
+      - "id"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+  NewRefReceiver:
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+      tag:
+        type: "string"
+  Error:
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+  Login:
+    type: "object"
+    required:
+    - "email"
+    - "password"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  Token:
+    type: "object"
+    required:
+    - "token"
+    properties:
+      token:
+        type: "string"
+  References:
+    allOf:
+    - $ref: "#/definitions/NewReference"
+    - required:
+      - "id"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+  NewReference:
+    properties:
+      referenceseeker:
+        $ref: "#/definitions/RefSeeker"
+      referenceprovider:
+        $ref: "#/definitions/RefProvider"
+      referencereceiver:
+        $ref: "#/definitions/RefProvider"
+      tag:
+        type: "string"
+      referencetype:
+        type: "string"

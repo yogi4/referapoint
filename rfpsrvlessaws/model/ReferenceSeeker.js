@@ -11,11 +11,28 @@ const model = mongoose.model('ReferenceSeeker', {
     type: String,
     required: false,
   },
+  created_date: {
+    type: Date,
+    required: false,
+    default: Date.now,
+  },
+  lastupdated_date: {
+    type: Date,
+    required: false,
+    default: Date.now,
+  },
   references: [{
     type: Schema.ObjectId,
     ref: 'Reference' 
   }],
-  },
+  reference_receivers: [{
+    type: Schema.ObjectId,
+    ref: 'User',
+  }],
+  reference_providers: [{
+    type: Schema.ObjectId,
+    ref: 'User',
+  }],
 });
 
 module.exports = model;
