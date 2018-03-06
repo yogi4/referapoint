@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-
 const model = mongoose.model('User', {
   name: {
     type: String,
@@ -57,16 +56,17 @@ const model = mongoose.model('User', {
       },
     },
   },
+  //this has to be driven by API too and make this an array
   usertype: {
     type: String,
     enum: ['person','software','solopreneur','organization']
 
-  }
-  roles: {
-    type: Array,
-    required: false,
-
   },
+  roles: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'Roles',
+    required: false,
+  }],
   created_date: {
     type: Date,
     required: false,
