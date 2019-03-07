@@ -8,8 +8,7 @@ mongoose.Promise = bluebird;
 
 
 //TODO: YOGI This entire handler needs revisiting 
-//const mongoString = 'mongodb://rfpawsmongo:RMD8h394o2aExsQAo3eB4yUUHrrhLizqxCyXruu6gMeRsKPNfK4POUHVdbQsscJ48xxqT6DAAwf1cUiT9rjo2A==@rfpawsmongo.documents.azure.com:10255/?ssl=true'; // MongoDB Url
-const mongoString = 'mongodb://rfpawsmongo:cMyREDTklx7gFotLX0P0XAoZipWuP4nXLSI1y0J3PgJxD8gcq5zRb9pMmVT9TERyfrElGRZHnDzYfxstWT19ig==@rfpawsmongo.documents.azure.com:10255/?ssl=true'; // MongoDB Url
+const mongoString = 'mongourl'
 
 const createErrorResponse = (statusCode, message) => ({
   statusCode: statusCode || 501,
